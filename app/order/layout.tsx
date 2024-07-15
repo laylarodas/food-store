@@ -1,7 +1,7 @@
 import OrderSideBar from "@/components/order/OrderSideBar";
 import OrderSummary from "@/components/order/OrderSummary";
 
-export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     return (
         <>
             <div className=" md:flex">
