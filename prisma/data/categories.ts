@@ -16,7 +16,7 @@ export const categories = [
         name: "Donuts"
     },
     {
-        slug: "pastel",
+        slug: "cake",
         name: "Cakes"
     },
     {
