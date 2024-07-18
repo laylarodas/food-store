@@ -1,5 +1,6 @@
 "use client"
 import { useStore } from "@/src/store"
+import { toast } from "react-toastify"
 import ProductDetails from "./ProductDetails"
 import { useMemo } from "react"
 import { formatCurrency } from "@/src/utils"
@@ -13,16 +14,27 @@ export default function OrderSummary() {
   const total = useMemo(() => order.reduce((total, item) => total + (item.quantity * item.price), 0), [order])
 
 
-  const handleCreateOrder = (formData: FormData) => {
+  const handleCreateOrder = async (formData: FormData) => {
     const data = {
       name: formData.get('name')
     }
 
+    /*
     const result = OrderSchema.safeParse(data)
-    console.log(result)
+    if(!result.success){
+      result.error.issues.forEach((issue) => {
+        toast.error(issue.message)
+      })
 
-    return
-    createOrder()
+      return
+    }*/
+
+    const response = await createOrder(data)
+    if (response?.errors) {
+      response.errors.forEach((issue) => {
+        toast.error(issue.message)
+      })
+    }
   }
 
 
@@ -53,7 +65,7 @@ export default function OrderSummary() {
               type="submit"
               value="Confirm Order"
               className="py-2 rounded uppercase text-white bg-black w-full text-center cursor-pointer font-bold"
-              
+
             />
           </form>
         </div>
