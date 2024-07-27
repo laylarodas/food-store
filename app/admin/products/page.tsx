@@ -1,10 +1,11 @@
+import { redirect } from "next/navigation";
 import ProductsPagination from "@/components/products/ProductsPagination";
 import ProductTable from "@/components/products/ProductTable";
 import Heading from "@/components/ui/Heading";
 import { prisma } from "@/src/lib/prisma";
 
 
-async function productCount( ) {
+async function productCount() {
   return await prisma.product.count()
 }
 
@@ -34,13 +35,15 @@ export default async function ProductsPage({ searchParams }: { searchParams: { p
 
   const page = +searchParams.page || 1
   const pageSize = 10
- 
 
+  if (page < 0) redirect('/admin/products')
 
   const productsData = await getProducts(page, pageSize)
   const totalProductsData = await productCount()
-  const [ products, totalProducts] = await Promise.all([productsData, totalProductsData])
+  const [products, totalProducts] = await Promise.all([productsData, totalProductsData])
   const totalPages = Math.ceil(totalProducts / pageSize)
+
+  if (page > totalPages) redirect('/admin/products')
 
 
   return (
@@ -49,7 +52,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: { p
 
       <ProductTable products={products} />
 
-      <ProductsPagination page={page} totalPages={totalPages}/>
+      <ProductsPagination page={page} totalPages={totalPages} />
     </>
   )
 }
