@@ -22,6 +22,22 @@ export const OrderIdSchema = z.object({
 
 export const SearchSchema = z.object({
     search: z.string()
-                .trim()
-                .min(1, {message: 'The search cannot be empty'})
+        .trim()
+        .min(1, { message: 'The search cannot be empty' })
+})
+
+export const ProductSchema = z.object({
+    name: z.string()
+        .trim()
+        .min(1, { message: 'Name cannot be empty' }),
+    price: z.string()
+        .trim()
+        .transform((value) => parseFloat(value))
+        .refine((value) => value > 0, { message: 'Invalid Price' })
+        .or(z.number().min(1, { message: 'Category is required' })),
+    categoryId: z.string()
+        .trim()
+        .transform((value) => parseInt(value))
+        .refine((value) => value > 0, { message: 'Category is required' })
+        .or(z.number().min(1, { message: 'Category is required' })),
 })
