@@ -1,3 +1,6 @@
+import EditProductForm from "@/components/products/EditProductForm"
+import ProductForm from "@/components/products/ProductForm"
+import Heading from "@/components/ui/Heading"
 import { prisma } from "@/src/lib/prisma"
 import { notFound, redirect } from "next/navigation"
 
@@ -20,7 +23,19 @@ export default async function EditProductsPage({ params }: { params: { id: strin
 
     const product = await getProductById(+params.id)
     console.log(product)
+    
+    
     return (
-        <div>page</div>
+        <>
+            <Heading>
+                Edit Product: {product.name}
+            </Heading>
+
+            <EditProductForm>
+                <ProductForm 
+                    product={product}
+                />
+            </EditProductForm>
+        </>
     )
 }
